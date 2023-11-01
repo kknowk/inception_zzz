@@ -1,0 +1,23 @@
+version: '3'
+services:
+  mariadb:
+    build:
+      context: mariadb
+    env_file:
+    - mariadb/.env
+  nginx:
+    build:
+      context: nginx
+    env_file:
+    - nginx/.env
+    volumes:
+      - ./wordpress/www:/var/www/html
+    ports:
+      - 443:443
+  php:
+    build:
+      context: wordpress
+    env_file:
+    - mariadb/.env
+    volumes:
+      - ./wordpress/www:/var/www/html
