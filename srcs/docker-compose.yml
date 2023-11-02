@@ -5,19 +5,27 @@ services:
       context: mariadb
     env_file:
     - mariadb/.env
+    volumes:
+      - /home/login/data/mariadb:/var/lib/mysql
+
   nginx:
     build:
       context: nginx
     env_file:
     - nginx/.env
     volumes:
-      - ./wordpress/www:/var/www/html
+      - /home/login/data/wordpress:/var/www/html
     ports:
       - 443:443
+
   php:
     build:
       context: wordpress
     env_file:
     - mariadb/.env
     volumes:
-      - ./wordpress/www:/var/www/html
+      - /home/login/data/wordpress:/var/www/html
+
+volumes:
+  mariadb_data:
+  wordpress_data:

@@ -13,6 +13,8 @@ RUN apt-get clean
 RUN mkdir /run/mysqld
 RUN chown -R mysql:mysql /run/mysqld
 RUN chown -R mysql:mysql /var/lib/mysql
+
+# 127.0.0.1 localhost を　すべてのIPアドレスに変換
 RUN sed -i -e "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
 
 COPY ./start.sh /tmp/start.sh
