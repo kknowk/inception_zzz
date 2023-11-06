@@ -21,6 +21,17 @@ if [ -n "$MARIADB_DATABASE" ] && [ -n "$MARIADB_USERNAME" ] && [ -n "$MARIADB_PA
   echo "[SQL]> SET PASSWORD for '$MARIADB_USERNAME'@'%' = password('**********');"
   unset MARIADB_PASSWORD
 
+  # 管理者ユーザーの作成（名前に「admin」や「Administrator」を含めない）
+  echo "CREATE USER '$ADMIN_USERNAME'@'%' IDENTIFIED BY 'root';" | mariadb
+  echo "[SQL]> CREATE USER '$ADMIN_USERNAME'@'%' IDENTIFIED BY 'root';"
+
+  echo "GRANT ALL PRIVILEGES ON *.* TO '$ADMIN_USERNAME'@'%';" | mariadb
+  echo "[SQL]> GRANT ALL PRIVILEGES ON *.* TO '$ADMIN_USERNAME'@'%';"
+
+  echo "SET PASSWORD for '$ADMIN_USERNAME'@'%' = password('$ADMIN_PASSWORD');" | mariadb
+  echo "[SQL]> SET PASSWORD for '$ADMIN_USERNAME'@'%' = password('**********');"
+  unset ADMIN_PASSWORD
+
   kill $(pgrep 'mysqld')
 fi
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir /etc/nginx/certs
+mkdir -p /etc/nginx/certs
 cd /etc/nginx/certs
 
 openssl genrsa -out cert.key 2048

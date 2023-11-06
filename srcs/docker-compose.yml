@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   mariadb:
     build:
@@ -6,26 +6,58 @@ services:
     env_file:
     - mariadb/.env
     volumes:
-      - /home/login/data/mariadb:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - frontend
 
   nginx:
+    depends_on:
+      - php
     build:
       context: nginx
     env_file:
     - nginx/.env
     volumes:
-      - /home/login/data/wordpress:/var/www/html
+      - wordpress_data:/var/www/html
     ports:
       - 443:443
+    networks:
+      - frontend
 
   php:
+    depends_on:
+      - mariadb
     build:
       context: wordpress
     env_file:
-    - mariadb/.env
+      - wordpress/.env
     volumes:
-      - /home/login/data/wordpress:/var/www/html
+      - wordpress_data:/var/www/html
+    networks:
+      - frontend
+    extra_hosts:
+      - "khorike.42.jp:127.0.0.1"
+
+networks:
+  frontend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/24
 
 volumes:
   mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/khorike/data/mariadb
   wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/khorike/data/wordpress

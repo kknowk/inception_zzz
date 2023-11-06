@@ -19,6 +19,8 @@ RUN sed -i -e "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
 
 COPY ./start.sh /tmp/start.sh
 
+EXPOSE 3306
+
 RUN chmod +x /tmp/start.sh
 
 CMD /tmp/start.sh
